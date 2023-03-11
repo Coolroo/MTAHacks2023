@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'response_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
           backgroundColor: Color(0xFF388087),
         ),
       ),
-      home: const MyHomePage(title: 'Let\'s Get Cooking!'),
+      // home: const MyHomePage(title: 'Let\'s Get Cooking!'),
+      home: const ResponsePage(),
     );
   }
 }
@@ -71,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.search),
                   labelText: "ex. Garlic Powder",
-                  // fillColor: 
+                  fillColor: Colors.white
                 ),
               ),
               const SizedBox(height: 15.0),
