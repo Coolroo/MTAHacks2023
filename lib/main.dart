@@ -18,14 +18,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: const ColorScheme(
           primary: Color(0xFF388087),
-          primaryVariant: Color(0xFF388087),
           secondary: Color(0xFFDDDDDA),
-          secondaryVariant: Color(0xFFC6C6C2),
+          tertiary: Color(0xFFC6C6C2),
           surface: Color(0xFFF6F6F2),
           background: Color(0xFFDDDDDA),
           error: Colors.deepOrange,
           onPrimary: Color(0xFFF6F6F2),
           onSecondary: Colors.black,
+          onTertiary: Colors.black,
           onSurface: Colors.black,
           onBackground: Colors.black,
           onError: Colors.white,
@@ -234,7 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Expanded(
               child: Material(
-                color: Theme.of(context).colorScheme.secondaryVariant,
+                color: Theme.of(context).colorScheme.tertiary,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListView.builder(
