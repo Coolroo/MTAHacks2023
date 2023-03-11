@@ -17,8 +17,22 @@ class MyApp extends StatelessWidget {
 //          Off white: #F6F6F2
 //          Darker off white: #DDDDDA
         // primarySwatch: Colors.blueGrey,
-        primaryColor: const Color(0xFF388087),
-        scaffoldBackgroundColor: const Color(0xFFF6F6F2),
+        colorScheme: const ColorScheme(
+          primary: Color(0xFF388087),
+          primaryVariant: Color(0xFF388087),
+          secondary: Color(0xFFDDDDDA),
+          secondaryVariant: Color(0xFFF6F6F2),
+          surface: Color(0xFFF6F6F2),
+          background: Color(0xFFDDDDDA),
+          error: Colors.deepOrange,
+          onPrimary: Color(0xFFF6F6F2),
+          onSecondary: Colors.black,
+          onSurface: Colors.black,
+          onBackground: Colors.black,
+          onError: Colors.white,
+          brightness: Brightness.light
+        ),
+        scaffoldBackgroundColor: const Color(0xFFDDDDDA),
         appBarTheme: const AppBarTheme(
           foregroundColor: Color(0xFFF6F6F2),
           backgroundColor: Color(0xFF388087),
@@ -28,8 +42,8 @@ class MyApp extends StatelessWidget {
           backgroundColor: Color(0xFF388087),
         ),
       ),
-      // home: const MyHomePage(title: 'Let\'s Get Cooking!'),
-      home: const ResponsePage(),
+      home: const MyHomePage(title: 'Let\'s Get Cooking!'),
+      // home: const ResponsePage(),
     );
   }
 }
@@ -47,6 +61,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   TextEditingController searchController = TextEditingController();
 
+  bool isVegetarian = false;
+  bool isVegan = false;
+  bool isGlutenFree = false;
+  bool isDairyFree = false;
+
   void _generateRecipe() {
     // some send to backend
   }
@@ -61,48 +80,117 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Image(image: AssetImage('assets/logo.png')),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextField(
-                controller: searchController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.search),
-                  labelText: "ex. Garlic Powder",
-                  fillColor: Colors.white
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+
+                // Text Input with instruction text
+                TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    iconColor: Theme.of(context).colorScheme.primary,
+                    prefixIcon: const Icon(Icons.search),
+                    labelText: "ex. Garlic Powder",
+                    fillColor: Colors.amber
+                  ),
                 ),
-              ),
-              const SizedBox(height: 15.0),
-              const Text(
-                "Type an ingredient then press enter.",
-                style: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-              RichText(
-                text: TextSpan(
+                const SizedBox(height: 15.0),
+                Text(
+                  "Type an ingredient then press enter.",
+                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18),
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "Press ",
+                        style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20),
+                      ),
+                      WidgetSpan(
+                        child: Icon(Icons.arrow_forward_outlined, size: 20, color: Theme.of(context).colorScheme.primary),
+                      ),
+                      TextSpan(
+                        text: " to generate your recipe.",
+                        style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20),
+                      ),
+                    ]
+                  ),
+                ),
+                Text(
+                  "*Taste satisfaction not guaranteed*",
+                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18),
+                ),
+
+                const SizedBox(height: 15.0),
+
+                // Checkbox row
+                Wrap(
                   children: [
-                    const TextSpan(
-                      text: "Press ",
-                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Checkbox(
+                          value: isVegetarian,
+                          checkColor: Colors.amber,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isVegetarian = value!;
+                            });
+                          }
+                        ), const Text("Vegetarian"),
+                      ]
                     ),
-                    WidgetSpan(
-                      child: Icon(Icons.arrow_forward_outlined, size: 20, color: Theme.of(context).primaryColor),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Checkbox(
+                          value: isVegan,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isVegan = value!;
+                            });
+                          }
+                        ), const Text("Vegan"),
+                      ]
                     ),
-                    const TextSpan(
-                      text: " to generate your recipe.",
-                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Checkbox(
+                          value: isGlutenFree,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isGlutenFree = value!;
+                            });
+                          }
+                        ), const Text("Gluten-Free"),
+                      ]
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Checkbox(
+                          value: isDairyFree,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isDairyFree = value!;
+                            });
+                          }
+                        ), const Text("Dairy-Free"),
+                      ],
                     ),
                   ]
                 ),
-              ),
-              const Text(
-                "*Taste satisfaction not guaranteed*",
-                style: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
