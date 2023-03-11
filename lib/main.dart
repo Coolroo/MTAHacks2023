@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           primary: Color(0xFF388087),
           primaryVariant: Color(0xFF388087),
           secondary: Color(0xFFDDDDDA),
-          secondaryVariant: Color(0xFFF6F6F2),
+          secondaryVariant: Color(0xFFC6C6C2),
           surface: Color(0xFFF6F6F2),
           background: Color(0xFFDDDDDA),
           error: Colors.deepOrange,
@@ -42,8 +42,8 @@ class MyApp extends StatelessWidget {
           backgroundColor: Color(0xFF388087),
         ),
       ),
-      home: const MyHomePage(title: 'Let\'s Get Cooking!'),
-      // home: const ResponsePage(),
+      // home: const MyHomePage(title: 'Let\'s Get Cooking!'),
+      home: const ResponsePage(),
     );
   }
 }
@@ -66,8 +66,16 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isGlutenFree = false;
   bool isDairyFree = false;
 
+  List<String> ingredients = [];
+
   void _generateRecipe() {
     // some send to backend
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -84,114 +92,151 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
 
-                // Text Input with instruction text
-                TextField(
-                  controller: searchController,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    iconColor: Theme.of(context).colorScheme.primary,
-                    prefixIcon: const Icon(Icons.search),
-                    labelText: "ex. Garlic Powder",
-                    fillColor: Colors.amber
-                  ),
-                ),
-                const SizedBox(height: 15.0),
-                Text(
-                  "Type an ingredient then press enter.",
-                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18),
-                ),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "Press ",
-                        style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20),
+                    // Text Input with instruction text
+                    TextField(
+                      controller: searchController,
+                      onEditingComplete: () => FocusScope.of(context).unfocus(),
+                      onSubmitted:(value) => setState(() {
+                        ingredients.add(value);
+                        searchController.text = "";
+                      }),
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        iconColor: Theme.of(context).colorScheme.primary,
+                        prefixIcon: const Icon(Icons.search),
+                        labelText: "ex. Garlic Powder",
+                        fillColor: Colors.amber
                       ),
-                      WidgetSpan(
-                        child: Icon(Icons.arrow_forward_outlined, size: 20, color: Theme.of(context).colorScheme.primary),
+                    ),
+                    const SizedBox(height: 15.0),
+                    Text(
+                      "Type an ingredient then press enter.",
+                      style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Press ",
+                            style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20),
+                          ),
+                          WidgetSpan(
+                            child: Icon(Icons.arrow_forward_outlined, size: 20, color: Theme.of(context).colorScheme.primary),
+                          ),
+                          TextSpan(
+                            text: " to generate your recipe.",
+                            style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20),
+                          ),
+                        ]
                       ),
-                      TextSpan(
-                        text: " to generate your recipe.",
-                        style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20),
-                      ),
-                    ]
-                  ),
-                ),
-                Text(
-                  "*Taste satisfaction not guaranteed*",
-                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18),
-                ),
+                    ),
+                    const SizedBox(height: 10.0),
+                    Text(
+                      "*Taste satisfaction NOT guaranteed*",
+                      style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18),
+                    ),
 
-                const SizedBox(height: 15.0),
+                    const SizedBox(height: 15.0),
 
-                // Checkbox row
-                Wrap(
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
+                    // Checkbox row
+                    Wrap(
                       children: [
-                        Checkbox(
-                          value: isVegetarian,
-                          checkColor: Colors.amber,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              isVegetarian = value!;
-                            });
-                          }
-                        ), const Text("Vegetarian"),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Checkbox(
+                              value: isVegetarian,
+                              checkColor: Colors.amber,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  isVegetarian = value!;
+                                });
+                              }
+                            ), const Text("Vegetarian"),
+                          ]
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Checkbox(
+                              value: isVegan,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  isVegan = value!;
+                                });
+                              }
+                            ), const Text("Vegan"),
+                          ]
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Checkbox(
+                              value: isGlutenFree,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  isGlutenFree = value!;
+                                });
+                              }
+                            ), const Text("Gluten-Free"),
+                          ]
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Checkbox(
+                              value: isDairyFree,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  isDairyFree = value!;
+                                });
+                              }
+                            ), const Text("Dairy-Free"),
+                          ],
+                        ),
                       ]
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Checkbox(
-                          value: isVegan,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              isVegan = value!;
-                            });
-                          }
-                        ), const Text("Vegan"),
-                      ]
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Checkbox(
-                          value: isGlutenFree,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              isGlutenFree = value!;
-                            });
-                          }
-                        ), const Text("Gluten-Free"),
-                      ]
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Checkbox(
-                          value: isDairyFree,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              isDairyFree = value!;
-                            });
-                          }
-                        ), const Text("Dairy-Free"),
-                      ],
-                    ),
-                  ]
+
+                    // Entered ingredients list
+                    
+
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+            Expanded(
+              child: Container(
+                color: Theme.of(context).colorScheme.secondaryVariant,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    itemCount: ingredients.isNotEmpty ? ingredients.length: 1,
+                    itemBuilder: (BuildContext bc, int i) {
+                      return ingredients.isNotEmpty ? ListTile(
+                        title: Text(ingredients[i]),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete_forever),
+                          onPressed: () { setState(() {
+                            ingredients.removeAt(i);
+                          }); },
+                        ),
+                      ) : 
+                      const Center(child: Text("Add the first ingredient!", style: TextStyle()),);
+                    }
+                  ),
+                ),
+              ),
+            ),
+          ]
         ),
       ),
       floatingActionButton: FloatingActionButton(
