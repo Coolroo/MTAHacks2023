@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+// import 'package:http/http.dart' as http;
+// import 'dart:convert';
 import 'package:recipe_gen/response_page.dart';
+import 'package:recipe_gen/recipe.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,9 +40,6 @@ class MyApp extends StatelessWidget {
           foregroundColor: Color(0xFFF6F6F2),
           backgroundColor: Color(0xFF388087),
         ),
-        // checkboxTheme: CheckboxThemeData(
-        //   fillColor: Color(0xFF388087),
-        // ),
         listTileTheme: const ListTileThemeData(
           tileColor: Color(0xFFDDDDDA),
           iconColor: Color(0xFF388087),
@@ -83,12 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // go to the result page and pass the data
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => 
-          ResponsePage(recipe: {
-            "recipe_name": "Spogooter",
-            "ingredients": [{"name": "noods", "amount": "12"}, {"name": "soice", "amount": "0.2375 gallons"}],
-            "steps": ["wet your drys", "dry your wets", "wet the drys again"]
-          })
+        MaterialPageRoute(builder: (context) => ResponsePage(recipe: Recipe())
         )
       );
     // }
