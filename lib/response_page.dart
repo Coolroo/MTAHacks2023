@@ -83,6 +83,7 @@ class _InstructionState extends State<Instruction> {
   Widget build(BuildContext context) {
     return Stepper(
       currentStep: _index,
+      
       onStepCancel: () {
         if (_index > 0) {
           setState(() {
@@ -102,7 +103,30 @@ class _InstructionState extends State<Instruction> {
           _index = index;
         });
       },
-      // Add Step for each step
+      controlsBuilder:(BuildContext context, ControlsDetails details) {
+        return Container(
+          margin: const EdgeInsets.only(top: 50),
+          child: Row(
+            children: [
+              if(_index < widget.steps.length-1)
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: details.onStepContinue,
+                    child: const Text("Continue")
+                    ),
+                  ),
+                const SizedBox(width: 12),
+                if(_index > 0) 
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: details.onStepCancel,
+                      child: const Text("Back")
+                    ),
+                  ),
+              ],
+            ),
+          );
+        },
       steps: widget.steps.map((e) => Step(
         title: Text("Step ${widget.steps.indexOf(e)+1}"),
         content: Container(
