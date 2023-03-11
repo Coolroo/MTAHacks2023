@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'response_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:recipe_gen/response_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,10 +15,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'RecipeGPT',
       theme: ThemeData(
-//          Green: #388087
-//          Off white: #F6F6F2
-//          Darker off white: #DDDDDA
-        // primarySwatch: Colors.blueGrey,
         colorScheme: const ColorScheme(
           primary: Color(0xFF388087),
           primaryVariant: Color(0xFF388087),
@@ -41,9 +39,18 @@ class MyApp extends StatelessWidget {
           foregroundColor: Color(0xFFF6F6F2),
           backgroundColor: Color(0xFF388087),
         ),
+        // checkboxTheme: CheckboxThemeData(
+        //   fillColor: Color(0xFF388087),
+        // ),
+        listTileTheme: const ListTileThemeData(
+          tileColor: Color(0xFFDDDDDA),
+          iconColor: Color(0xFF388087),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
+          style: ListTileStyle.list,
+        ),
       ),
-      // home: const MyHomePage(title: 'Let\'s Get Cooking!'),
-      home: const ResponsePage(),
+      home: const MyHomePage(title: 'Let\'s Get Cooking!'),
+      // home: const ResponsePage(),
     );
   }
 }
@@ -68,8 +75,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<String> ingredients = [];
 
-  void _generateRecipe() {
+  void _generateRecipe() async {
     // some send to backend
+    // final response = await http.get(Uri.parse('https://plagueinc.coolroo.ca/recipe/getRecipe'));
+    // var data = json.decode(response.body);
+    // if (response.statusCode == 200 && data != null) {
+      // go to the result page and pass the data
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => 
+          ResponsePage(recipe: {
+            "recipe_name": "Spogooter",
+            "ingredients": [{"name": "noods", "amount": "12"}, {"name": "soice", "amount": "0.2375 gallons"}],
+            "steps": ["wet your drys", "dry your wets", "wet the drys again"]
+          })
+        )
+      );
+    // }
   }
 
   @override
@@ -114,7 +136,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         iconColor: Theme.of(context).colorScheme.primary,
                         prefixIcon: const Icon(Icons.search),
                         labelText: "ex. Garlic Powder",
-                        fillColor: Colors.amber
                       ),
                     ),
                     const SizedBox(height: 15.0),
@@ -155,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           children: [
                             Checkbox(
                               value: isVegetarian,
-                              checkColor: Colors.amber,
+                              activeColor: Theme.of(context).colorScheme.primary,
                               onChanged: (bool? value) {
                                 setState(() {
                                   isVegetarian = value!;
@@ -169,6 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           children: [
                             Checkbox(
                               value: isVegan,
+                              activeColor: Theme.of(context).colorScheme.primary,
                               onChanged: (bool? value) {
                                 setState(() {
                                   isVegan = value!;
@@ -182,6 +204,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           children: [
                             Checkbox(
                               value: isGlutenFree,
+                              activeColor: Theme.of(context).colorScheme.primary,
                               onChanged: (bool? value) {
                                 setState(() {
                                   isGlutenFree = value!;
@@ -195,6 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           children: [
                             Checkbox(
                               value: isDairyFree,
+                              activeColor: Theme.of(context).colorScheme.primary,
                               onChanged: (bool? value) {
                                 setState(() {
                                   isDairyFree = value!;
@@ -214,23 +238,35 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Expanded(
-              child: Container(
+              child: Material(
                 color: Theme.of(context).colorScheme.secondaryVariant,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListView.builder(
                     itemCount: ingredients.isNotEmpty ? ingredients.length: 1,
                     itemBuilder: (BuildContext bc, int i) {
-                      return ingredients.isNotEmpty ? ListTile(
-                        title: Text(ingredients[i]),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete_forever),
-                          onPressed: () { setState(() {
-                            ingredients.removeAt(i);
-                          }); },
-                        ),
+                      return ingredients.isNotEmpty ? Column(
+                        children: [
+                          ListTile(
+                            title: Text(ingredients[i]),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete_forever),
+                              onPressed: () { setState(() {
+                                ingredients.removeAt(i);
+                              }); },
+                            ),
+                          ),
+                          const SizedBox(height: 5.0),
+                        ]
                       ) : 
-                      const Center(child: Text("Add the first ingredient!", style: TextStyle()),);
+                      Column(
+                        children: const[
+                          SizedBox(height: 15.0),
+                          Center(
+                            child: Text("Add the first ingredient!", style: TextStyle(fontSize: 18)),
+                          ),
+                        ],
+                      );
                     }
                   ),
                 ),
