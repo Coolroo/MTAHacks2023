@@ -2,3 +2,4 @@
 .DS_Store
 backend/.gradle
 backend/build
+./node_modules

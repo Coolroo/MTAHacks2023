@@ -1,0 +1,132 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  border: 2px solid #000;
+  padding: 20px;
+  width: 900px; /* Set fixed height for desktop */
+  overflow: auto;
+  background: #F6F6F2;
+}
+
+.header {
+  border: 2px solid #F6F6F2;
+}
+
+.content {
+  display:flex;
+  flex-direction: column;
+  background: #F6F6F2;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  align-items: center;
+  border: 2px solid #F6F6F2;
+  width: 900px;
+  height: auto;
+}
+
+.container {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  align-items: center;
+}
+
+@media only screen and (max-width: 768px) {
+  .wrapper {
+    width: auto; /* Remove fixed height for smaller screens */
+    max-width: 95%;
+    align-items:center;
+  }
+  .container {
+    width: max-content;
+  }
+}
+
+p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.footer {
+  background: #DDDDDA;
+  height: 250px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 0;
+  overflow: scroll;
+}
+
+.ingredients {
+  background: #DDDDDA;
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+ul {
+  columns: 3;
+  -webkit-columns: 3;
+  -moz-columns: 3;
+}
+
+::-webkit-scrollbar
+    {
+      width: 0;  /* for vertical scrollbars */
+      height: 0;
+    }
+    
+    ::-webkit-scrollbar-track
+    {
+      background: rgba(0, 0, 0, 0.1);
+    }
+    
+    ::-webkit-scrollbar-thumb
+    {
+      background: rgba(0, 0, 0, 0.5);
+    }
+  
+    .ingredientButton {
+      padding: 0;
+      border: none;
+      background: none;
+    }
