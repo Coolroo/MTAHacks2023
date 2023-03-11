@@ -12,8 +12,8 @@ class ResponsePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(recipe.getName()),
         actions: const [
-          SizedBox(
-            width: 50,
+          Padding(
+            padding: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 5.0),
             child: Image(image: AssetImage('assets/logo.png')),
           ),
         ],

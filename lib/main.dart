@@ -98,10 +98,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        leading: const Padding(
-          padding: EdgeInsets.fromLTRB(10.0, 5.0, 0.0, 5.0),
-          child: Image(image: AssetImage('assets/logo.png')),
-        ),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 5.0),
+            child: Image(image: AssetImage('assets/logo.png')),
+          ),
+        ],
       ),
       body: GestureDetector(
         onTap: () {
