@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   http: ^0.13.5
+  flutter_native_splash: ^2.2.19
 
 dev_dependencies:
   flutter_test:
@@ -26,6 +27,10 @@ flutter:
 
   assets:
     - assets/logo.png
+
+flutter_native_splash:
+  color: "#388087"
+  image: assets/logo.png
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
