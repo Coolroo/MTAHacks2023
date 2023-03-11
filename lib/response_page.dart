@@ -39,22 +39,29 @@ class Ingredient extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: ingredients.length,
-        itemBuilder: (BuildContext bc, int i) {
-          print(ingredients[i].entries);
-          return Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(ingredients[i][0].toString(), textAlign: TextAlign.center),
-              ),
-              Expanded(
-                child: Text(ingredients[i][1].toString(), textAlign: TextAlign.center),
-              ),
-            ],
-          );
-        }
+      child: Column(
+        children: [
+          const Text(
+            "Ingredients",
+            style: TextStyle(fontSize: 20),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: ingredients.length,
+            itemBuilder: (BuildContext bc, int i) {
+              return Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(ingredients[i].entries.first.value, textAlign: TextAlign.center),
+                  ),
+                  Expanded(
+                    child: Text(ingredients[i].entries.last.value, textAlign: TextAlign.center),
+                  ),
+                ],
+              );
+            }
+          )
+        ]
       )
     );
   }
