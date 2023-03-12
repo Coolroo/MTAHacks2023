@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Recipe GPT',
       theme: ThemeData(
         colorScheme: const ColorScheme(
@@ -66,7 +67,9 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
+
+  bool isLoading = false;
 
   TextEditingController searchController = TextEditingController();
 
@@ -79,6 +82,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _generateRecipe() async {
     if (ingredients.isEmpty) return;
+
+    isLoading = true;
 
     List<String> restrictions = [];
     if (isVegetarian) restrictions.add("vegetarian");
@@ -100,6 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
       })
     );
     var data = json.decode(response.body);
+    isLoading = false;
     if (response.statusCode == 200 && data != null) {
       // go to the result page and pass the data
       Navigator.push(
@@ -109,6 +115,20 @@ class _MyHomePageState extends State<MyHomePage> {
         )
       );
     }
+  }
+
+  late AnimationController loadController;
+
+  @override
+  void initState() {
+    loadController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..addListener(() {
+        setState(() {});
+    });
+    loadController.repeat(reverse: true);
+    super.initState();
   }
 
   @override
@@ -129,175 +149,180 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+      body: (isLoading ?
+        Center(child: CircularProgressIndicator(
+          value: loadController.value,
+        )) :
+        GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
 
-                    // Text Input with instruction text
-                    TextField(
-                      controller: searchController,
-                      onSubmitted:(value) => setState(() {
-                        ingredients.add(value);
-                        searchController.text = "";
-                      }),
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        iconColor: Theme.of(context).colorScheme.primary,
-                        prefixIcon: const Icon(Icons.search),
-                        labelText: "ex. Garlic Powder",
+                      // Text Input with instruction text
+                      TextField(
+                        controller: searchController,
+                        onSubmitted:(value) => setState(() {
+                          ingredients.add(value);
+                          searchController.text = "";
+                        }),
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          iconColor: Theme.of(context).colorScheme.primary,
+                          prefixIcon: const Icon(Icons.search),
+                          labelText: "ex. Garlic Powder",
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 15.0),
-                    Text(
-                      "Type an ingredient then press enter.",
-                      style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "Press ",
-                            style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20),
-                          ),
-                          WidgetSpan(
-                            child: Icon(Icons.arrow_forward_outlined, size: 20, color: Theme.of(context).colorScheme.primary),
-                          ),
-                          TextSpan(
-                            text: " to generate your recipe.",
-                            style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20),
-                          ),
-                        ]
+                      const SizedBox(height: 15.0),
+                      Text(
+                        "Type an ingredient then press enter.",
+                        style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18),
                       ),
-                    ),
-                    const SizedBox(height: 10.0),
-                    Text(
-                      "*Taste satisfaction NOT guaranteed*",
-                      style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18),
-                    ),
-
-                    const SizedBox(height: 15.0),
-
-                    // Checkbox row
-                    Wrap(
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
+                      RichText(
+                        text: TextSpan(
                           children: [
-                            Checkbox(
-                              value: isVegetarian,
-                              activeColor: Theme.of(context).colorScheme.primary,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  isVegetarian = value!;
-                                });
-                              }
-                            ), const Text("Vegetarian"),
-                          ]
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Checkbox(
-                              value: isVegan,
-                              activeColor: Theme.of(context).colorScheme.primary,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  isVegan = value!;
-                                });
-                              }
-                            ), const Text("Vegan"),
-                          ]
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Checkbox(
-                              value: isGlutenFree,
-                              activeColor: Theme.of(context).colorScheme.primary,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  isGlutenFree = value!;
-                                });
-                              }
-                            ), const Text("Gluten-Free"),
-                          ]
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Checkbox(
-                              value: isDairyFree,
-                              activeColor: Theme.of(context).colorScheme.primary,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  isDairyFree = value!;
-                                });
-                              }
-                            ), const Text("Dairy-Free"),
-                          ],
-                        ),
-                      ]
-                    ),
-
-                    // Entered ingredients list
-                    
-
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: Material(
-                color: Theme.of(context).colorScheme.tertiary,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
-                    itemCount: ingredients.isNotEmpty ? ingredients.length: 1,
-                    itemBuilder: (BuildContext bc, int i) {
-                      return ingredients.isNotEmpty ? Column(
-                        children: [
-                          ListTile(
-                            title: Text(ingredients[i]),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete_forever),
-                              onPressed: () { setState(() {
-                                ingredients.removeAt(i);
-                              }); },
+                            TextSpan(
+                              text: "Press ",
+                              style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20),
                             ),
+                            WidgetSpan(
+                              child: Icon(Icons.arrow_forward_outlined, size: 20, color: Theme.of(context).colorScheme.primary),
+                            ),
+                            TextSpan(
+                              text: " to generate your recipe.",
+                              style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20),
+                            ),
+                          ]
+                        ),
+                      ),
+                      const SizedBox(height: 10.0),
+                      Text(
+                        "*Taste satisfaction NOT guaranteed*",
+                        style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18),
+                      ),
+
+                      const SizedBox(height: 15.0),
+
+                      // Checkbox row
+                      Wrap(
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Checkbox(
+                                value: isVegetarian,
+                                activeColor: Theme.of(context).colorScheme.primary,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    isVegetarian = value!;
+                                  });
+                                }
+                              ), const Text("Vegetarian"),
+                            ]
                           ),
-                          const SizedBox(height: 5.0),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Checkbox(
+                                value: isVegan,
+                                activeColor: Theme.of(context).colorScheme.primary,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    isVegan = value!;
+                                  });
+                                }
+                              ), const Text("Vegan"),
+                            ]
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Checkbox(
+                                value: isGlutenFree,
+                                activeColor: Theme.of(context).colorScheme.primary,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    isGlutenFree = value!;
+                                  });
+                                }
+                              ), const Text("Gluten-Free"),
+                            ]
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Checkbox(
+                                value: isDairyFree,
+                                activeColor: Theme.of(context).colorScheme.primary,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    isDairyFree = value!;
+                                  });
+                                }
+                              ), const Text("Dairy-Free"),
+                            ],
+                          ),
                         ]
-                      ) : 
-                      Column(
-                        children: const[
-                          SizedBox(height: 15.0),
-                          Center(
-                            child: Text("Add the first ingredient!", style: TextStyle(fontSize: 18)),
-                          ),
-                        ],
-                      );
-                    }
+                      ),
+
+                      // Entered ingredients list
+                      
+
+                    ],
                   ),
                 ),
               ),
-            ),
-          ]
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
+              Expanded(
+                child: Material(
+                  color: Theme.of(context).colorScheme.tertiary,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.builder(
+                      itemCount: ingredients.isNotEmpty ? ingredients.length: 1,
+                      itemBuilder: (BuildContext bc, int i) {
+                        return ingredients.isNotEmpty ? Column(
+                          children: [
+                            ListTile(
+                              title: Text(ingredients[i]),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.delete_forever),
+                                onPressed: () { setState(() {
+                                  ingredients.removeAt(i);
+                                }); },
+                              ),
+                            ),
+                            const SizedBox(height: 5.0),
+                          ]
+                        ) : 
+                        Column(
+                          children: const[
+                            SizedBox(height: 15.0),
+                            Center(
+                              child: Text("Add the first ingredient!", style: TextStyle(fontSize: 18)),
+                            ),
+                          ],
+                        );
+                      }
+                    ),
+                  ),
+                ),
+              ),
+            ]
+          ),
+        )),
+      floatingActionButton: (isLoading ? null :
+      FloatingActionButton(
         onPressed: _generateRecipe,
         tooltip: 'Generate',
         child: const Icon(Icons.arrow_forward_outlined),
-      ),
+      )),
     );
   }
 }
