@@ -37,7 +37,34 @@ class Ingredient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+
+    return Card(
+      child: ExpansionTile(
+        initiallyExpanded: true,
+        title: const Text("Ingredient", style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+        ),
+        children: [
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: ingredients.length,
+            itemBuilder: (BuildContext bc, int i) {
+              return Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(ingredients[i].entries.first.value, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
+                  ),
+                  Expanded(
+                    child: Text(ingredients[i].entries.last.value, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
+                  ),
+                ],
+              );
+            }
+          )
+        ],
+      ),
+    );
+
+    /*return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
@@ -63,7 +90,7 @@ class Ingredient extends StatelessWidget {
           )
         ]
       )
-    );
+    );*/
   }
 }
 
@@ -128,7 +155,7 @@ class _InstructionState extends State<Instruction> {
           );
         },
       steps: widget.steps.map((e) => Step(
-        title: Text("Step ${widget.steps.indexOf(e)+1}"),
+        title: const Text(""),
         content: Container(
             alignment: Alignment.centerLeft,
             child: Text(e)

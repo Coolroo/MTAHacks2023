@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
           style: ListTileStyle.list,
         ),
+        cardTheme: const CardTheme(color: Color(0xFFDDDDDA,), shadowColor: Color(0x00000000))
       ),
       home: const MyHomePage(title: 'Let\'s Get Cooking!'),
       // home: const ResponsePage(),
