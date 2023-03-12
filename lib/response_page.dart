@@ -41,7 +41,9 @@ class Ingredient extends StatelessWidget {
     return Card(
       child: ExpansionTile(
         initiallyExpanded: true,
-        title: const Text("Ingredient", style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+        title: const Text(
+          "Ingredients",
+          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
         ),
         children: [
           ListView.builder(
@@ -51,46 +53,27 @@ class Ingredient extends StatelessWidget {
               return Row(
                 children: <Widget>[
                   Expanded(
-                    child: Text(ingredients[i].entries.first.value, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
+                    child: Text(
+                      ingredients[i].entries.first.value,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)
+                    ),
                   ),
                   Expanded(
-                    child: Text(ingredients[i].entries.last.value, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
+                    child: Text(
+                      ingredients[i].entries.last.value,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)
+                    ),
                   ),
                 ],
               );
             }
-          )
+          ),
+          const SizedBox(height: 10.0),
         ],
       ),
     );
-
-    /*return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          const Text(
-            "Ingredients",
-            style: TextStyle(fontSize: 20),
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: ingredients.length,
-            itemBuilder: (BuildContext bc, int i) {
-              return Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(ingredients[i].entries.first.value, textAlign: TextAlign.center),
-                  ),
-                  Expanded(
-                    child: Text(ingredients[i].entries.last.value, textAlign: TextAlign.center),
-                  ),
-                ],
-              );
-            }
-          )
-        ]
-      )
-    );*/
   }
 }
 
@@ -110,7 +93,6 @@ class _InstructionState extends State<Instruction> {
   Widget build(BuildContext context) {
     return Stepper(
       currentStep: _index,
-      
       onStepCancel: () {
         if (_index > 0) {
           setState(() {

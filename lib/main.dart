@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'RecipeGPT',
+      title: 'Recipe GPT',
       theme: ThemeData(
         colorScheme: const ColorScheme(
           primary: Color(0xFF388087),
@@ -46,7 +46,10 @@ class MyApp extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
           style: ListTileStyle.list,
         ),
-        cardTheme: const CardTheme(color: Color(0xFFDDDDDA,), shadowColor: Color(0x00000000))
+        cardTheme: const CardTheme(
+          color: Color(0xFFDDDDDA,),
+          shadowColor: Color(0x00000000)
+        )
       ),
       home: const MyHomePage(title: 'Let\'s Get Cooking!'),
       // home: const ResponsePage(),
