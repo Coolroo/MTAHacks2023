@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
 import './css/HomePage.css';
 import Header from './Header';
+import { useLocation } from 'react-router-dom';
 
 function ResultPage(props) {
 
-  const recipe_name = props.recipe_name;
-  const ingredients = props.ingredients;
-  const steps = props.steps;
+  const { state } = useLocation();
+
+  const recipe_name = state.recipe_name;
+  const ingredients = state.ingredients;
+  const steps = state.steps;
 
   return (
     <div className="container">
@@ -14,7 +16,7 @@ function ResultPage(props) {
       <div className="content">
       <h1>{recipe_name}</h1>
       <h2>Ingredients</h2>
-      {/* <ul>
+       <ul>
         {ingredients.map((ingredient, index) => (
           <li key={index}>{ingredient.amount} {ingredient.name}</li>
         ))}
@@ -24,7 +26,7 @@ function ResultPage(props) {
         {steps.map((step, index) => (
           <li key={index}>{step}</li>
         ))}
-      </ol> */}
+      </ol> 
     </div>
       </div>
   );

@@ -19,9 +19,13 @@ function HomePage() {
     const handleCheckbox3Change = () => { setIsChecked3(!isChecked3); };
     const handleCheckbox4Change = () => { setIsChecked4(!isChecked4); };
 
+    const [isVisible, setIsVisible] = useState(false);
+    const [hasError, setError] = useState(false);
+
     const navigate = useNavigate();
     
     function handleClick() {
+    
       const diets = [];
       if (isChecked1) { diets.push("Vegan") };
       if (isChecked2) { diets.push("Vegetarian") };
@@ -36,12 +40,17 @@ function HomePage() {
         excludedIngredients: []
       };
 
+      setError(false);
+      setIsVisible(true);
+
       axios.post('https://plagueinc.coolroo.ca/recipe/getRecipe', body)
     .then(response => {
       console.log(response.data);
       navigate('/result', { state: response.data });
     })
     .catch(error => {
+      setIsVisible(false);
+      setError(true);
       console.log(error);
     });
 
@@ -80,6 +89,8 @@ function HomePage() {
       <button type="submit" onClick={handleClick}>→</button>
 
     </div>
+    <p style={{ display: isVisible ? "block" : "none"}}>Generating your recipe, please wait one moment...</p>
+    <p style={{ display: hasError ? "block" : "none"}}>An error occured, please try again.</p>
       <br></br>
       <p>Type an ingredient then press 'Enter'. Press → to generate a recipe.</p>
       <p>Taste satisfaction NOT guaranteed.</p>
@@ -87,7 +98,7 @@ function HomePage() {
       
       <div className="checkbox-grid">
       <div>
-        <label>
+        <label> 
           <input
             type="checkbox"
             checked={isChecked1}

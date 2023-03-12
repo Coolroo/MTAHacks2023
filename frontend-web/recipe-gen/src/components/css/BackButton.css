@@ -1,0 +1,18 @@
+.back {
+    color: #F6F6F2;
+    padding-left: 10px;
+    padding-top: 10px;
+    
+}
+
+a {
+    text-decoration: none;
+}
+
+a:link, a:visited {
+    color: #F6F6F2;
+}
+
+a:hover {
+    color: #F6F6F2;
+}
