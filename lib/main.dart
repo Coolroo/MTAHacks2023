@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:recipe_gen/response_page.dart';
 import 'package:recipe_gen/recipe.dart';
 
@@ -74,17 +74,37 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> ingredients = [];
 
   void _generateRecipe() async {
-    // some send to backend
-    // final response = await http.get(Uri.parse('https://plagueinc.coolroo.ca/recipe/getRecipe'));
-    // var data = json.decode(response.body);
-    // if (response.statusCode == 200 && data != null) {
+    if (ingredients.isEmpty) return;
+
+    List<String> restrictions = [];
+    if (isVegetarian) restrictions.add("vegetarian");
+    if (isVegan) restrictions.add("vegan");
+    if (isGlutenFree) restrictions.add("gluten free");
+    if (isDairyFree) restrictions.add("dairy free");
+
+    List<String> excludes = [];
+ 
+    final response = await http.post(
+      Uri.parse('https://plagueinc.coolroo.ca/recipe/getRecipe'),
+      headers: <String, String> {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic> {
+        "ingredients": ingredients,
+        "dietaryRestrictions": restrictions,
+        "excludedIngredients": excludes
+      })
+    );
+    var data = json.decode(response.body);
+    if (response.statusCode == 200 && data != null) {
       // go to the result page and pass the data
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ResponsePage(recipe: Recipe())
+        MaterialPageRoute(
+          builder: (context) => ResponsePage(recipe: Recipe(data))
         )
       );
-    // }
+    }
   }
 
   @override
@@ -121,7 +141,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     // Text Input with instruction text
                     TextField(
                       controller: searchController,
-                      onEditingComplete: () => FocusScope.of(context).unfocus(),
                       onSubmitted:(value) => setState(() {
                         ingredients.add(value);
                         searchController.text = "";

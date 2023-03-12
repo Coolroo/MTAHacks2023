@@ -1,17 +1,23 @@
 class Recipe {
   String name = "Spogooter";
-  List<Map<String,String>> ingredients = [{"name": "noods", "amount": "12"}, {"name": "soice", "amount": "0.2375 gallons"}];
-  List<String> steps = ["wet your drys", "dry your wets", "wet the drys again"];
+  List<dynamic> ingredients = [{"name": "noods", "amount": "12"}, {"name": "soice", "amount": "0.2375 gallons"}];
+  List<dynamic> steps = ["wet your drys", "dry your wets", "wet the drys again"];
+
+  Recipe (Map<dynamic, dynamic> data) {
+    name = data['recipe_name'];
+    ingredients = data['ingredients'];
+    steps = data['steps'];
+  }
 
   String getName() {
     return name;
   }
 
-  List<Map<String,String>> getIngredients() {
+  List<dynamic> getIngredients() {
     return ingredients;
   }
 
-  List<String> getSteps() {
+  List<dynamic> getSteps() {
     return steps;
   }
 }

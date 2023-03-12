@@ -33,7 +33,7 @@ class ResponsePage extends StatelessWidget {
 class Ingredient extends StatelessWidget {
   const Ingredient({Key? key, required this.ingredients}) : super(key: key);
 
-  final List<Map<String, String>> ingredients;
+  final List<dynamic> ingredients;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class Ingredient extends StatelessWidget {
 class Instruction extends StatefulWidget {
   const Instruction({ Key? key, required this.steps}) : super(key: key);
 
-  final List<String> steps;
+  final List<dynamic> steps;
 
   @override
   State<Instruction> createState() => _InstructionState();
