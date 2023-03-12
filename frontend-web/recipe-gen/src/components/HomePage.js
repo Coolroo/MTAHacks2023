@@ -8,7 +8,6 @@ function HomePage() {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [ingredients, setIngredients] = useState([]);
-    const [diets, setDiets] = useState([]);
 
     const [isChecked1, setIsChecked1] = useState(false);
     const [isChecked2, setIsChecked2] = useState(false);
@@ -21,22 +20,31 @@ function HomePage() {
     const handleCheckbox4Change = () => { setIsChecked4(!isChecked4); };
 
     const navigate = useNavigate();
-
+    
     function handleClick() {
-      const queryParams = {
+      const diets = [];
+      if (isChecked1) { diets.push("Vegan") };
+      if (isChecked2) { diets.push("Vegetarian") };
+      if (isChecked3) { diets.push("Dairy-free") };
+      if (isChecked4) { diets.push("Gluten-free") };
+
+      console.log(diets);
+
+      const body = {
         ingredients: ingredients,
-        dietaryRestrictions: [],
+        dietaryRestrictions: diets,
         excludedIngredients: []
       };
-    
-      axios.get('https://plagueinc.coolroo.ca/recipe/getRecipe', { params: queryParams })
-        .then(response => {
-          console.log(response);
-          //navigate('/result', { state: response.data });
-        })
-        .catch(error => {
-          console.log(error);
-        });
+
+      axios.post('https://plagueinc.coolroo.ca/recipe/getRecipe', body)
+    .then(response => {
+      console.log(response.data);
+      navigate('/result', { state: response.data });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
     }
 
     function removeIngredient(index) {

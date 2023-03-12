@@ -4,7 +4,9 @@ import Header from './Header';
 
 function ResultPage(props) {
 
-  const { recipe_name, ingredients, steps } = props.response;
+  const recipe_name = props.recipe_name;
+  const ingredients = props.ingredients;
+  const steps = props.steps;
 
   return (
     <div className="container">
@@ -12,7 +14,7 @@ function ResultPage(props) {
       <div className="content">
       <h1>{recipe_name}</h1>
       <h2>Ingredients</h2>
-      <ul>
+      {/* <ul>
         {ingredients.map((ingredient, index) => (
           <li key={index}>{ingredient.amount} {ingredient.name}</li>
         ))}
@@ -22,7 +24,7 @@ function ResultPage(props) {
         {steps.map((step, index) => (
           <li key={index}>{step}</li>
         ))}
-      </ol>
+      </ol> */}
     </div>
       </div>
   );
