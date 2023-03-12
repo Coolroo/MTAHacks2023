@@ -1,0 +1,4 @@
+#Sat Mar 11 21:47:18 AST 2023
+base.0=D\:\\coding\\MtAHacks2023\\app\\recipe_gen\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

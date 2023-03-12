@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.recipe_gen.app-mergeDebugResources-9:/values-ro/values-ro.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\josh7\\.gradle\\caches\\transforms-3\\ab28a6e8d0c676a767dac799ba6e2187\\transformed\\core-1.6.0\\res\\values-ro\\values-ro.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    }
+                }
+            ]
+        }
+    ]
+}
