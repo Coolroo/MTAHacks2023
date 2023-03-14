@@ -3,8 +3,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:recipe_gen/response_page.dart';
 import 'package:recipe_gen/recipe.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(const MyApp());
 }
 
@@ -53,7 +56,6 @@ class MyApp extends StatelessWidget {
         )
       ),
       home: const MyHomePage(title: 'Let\'s Get Cooking!'),
-      // home: const ResponsePage(),
     );
   }
 }
@@ -81,39 +83,46 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
   List<String> ingredients = [];
 
   void _generateRecipe() async {
-    if (ingredients.isEmpty) return;
-
-    isLoading = true;
-
-    List<String> restrictions = [];
-    if (isVegetarian) restrictions.add("vegetarian");
-    if (isVegan) restrictions.add("vegan");
-    if (isGlutenFree) restrictions.add("gluten free");
-    if (isDairyFree) restrictions.add("dairy free");
-
-    List<String> excludes = [];
- 
-    final response = await http.post(
-      Uri.parse('https://plagueinc.coolroo.ca/recipe/getRecipe'),
-      headers: <String, String> {
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, dynamic> {
-        "ingredients": ingredients,
-        "dietaryRestrictions": restrictions,
-        "excludedIngredients": excludes
-      })
-    );
-    var data = json.decode(response.body);
-    isLoading = false;
-    if (response.statusCode == 200 && data != null) {
-      // go to the result page and pass the data
+    if (ingredients.isEmpty) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ResponsePage(recipe: Recipe(data))
+          builder: (context) => ResponsePage(recipe: Recipe.empty())
         )
       );
+    } else {
+      isLoading = true;
+
+      List<String> restrictions = [];
+      if (isVegetarian) restrictions.add("vegetarian");
+      if (isVegan) restrictions.add("vegan");
+      if (isGlutenFree) restrictions.add("gluten free");
+      if (isDairyFree) restrictions.add("dairy free");
+
+      List<String> excludes = [];
+  
+      final response = await http.post(
+        Uri.parse('http://138.73.181.171:8090/getRecipe'),
+        headers: <String, String> {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic> {
+          "ingredients": ingredients,
+          "dietaryRestrictions": restrictions,
+          "excludedIngredients": excludes
+        })
+      );
+      var data = json.decode(response.body);
+      isLoading = false;
+      if (response.statusCode == 200 && data != null) {
+        // go to the result page and pass the data
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResponsePage(recipe: Recipe(data))
+          )
+        );
+      }
     }
   }
 
